@@ -120,11 +120,13 @@ RUN mkdir -p /opt/data
 # Volumes"). Persistence on Railway is provided by a Railway Volume mounted at
 # /opt/data. Kept here (commented) so local docker/compose still know the intent.
 # VOLUME [ "/opt/data" ]
-# Ensure shell entrypoints are executable. `railway up` uploads from a Windows
-# working tree where the unix +x bit is lost, and the earlier `chmod a+rX`
-# (capital X) does NOT add +x to plain files — so tini fails to exec the
-# entrypoint with "Permission denied" unless we set it explicitly here.
-RUN chmod +x /opt/hermes/docker/*.sh /opt/hermes/scripts/*.sh 2>/dev/null || true
+# Normalize shell scripts for a Windows-sourced `railway up`:
+#  - strip CRLF line endings (git autocrlf=true on Windows turns the shebang
+#    into "#!/bin/bash\r", so tini fails with "No such file or directory")
+#  - restore the +x bit (lost on Windows; earlier `chmod a+rX` won't add x to
+#    plain files, so tini would fail with "Permission denied")
+RUN find /opt/hermes -type f -name '*.sh' -exec sed -i 's/\r$//' {} + ; \
+    chmod +x /opt/hermes/docker/*.sh /opt/hermes/scripts/*.sh 2>/dev/null || true
 ENTRYPOINT [ "/usr/bin/tini", "-g", "--", "/opt/hermes/docker/entrypoint.sh" ]
 # Default command for Railway/cloud deployment: run the gateway (which hosts
 # the OpenAI-compatible API server when API_SERVER_* env vars are set).
