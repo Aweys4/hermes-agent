@@ -8,7 +8,7 @@
 model:
   # Default model to use (can be overridden with --model flag)
   # Both "default" and "model" work as the key name here.
-  default: "deepseek/deepseek-v4-flash:free"
+  default: "openai/gpt-oss-120b:free"
   
   # Inference provider selection:
   #   "auto"         - Auto-detect from credentials (default)
@@ -1114,13 +1114,13 @@ auxiliary:
     model: "nvidia/nemotron-nano-12b-v2-vl:free"
   web_extract:
     provider: "openrouter"
-    model: "nvidia/nemotron-nano-9b-v2:free"
+    model: "openai/gpt-oss-120b:free"
   session_search:
     provider: "openrouter"
-    model: "nvidia/nemotron-nano-9b-v2:free"
+    model: "openai/gpt-oss-120b:free"
   compression:
     provider: "openrouter"
-    model: "nvidia/nemotron-nano-9b-v2:free"
+    model: "openai/gpt-oss-120b:free"
 
 # Short names for `/model <alias>`. Free aliases stay free; the claude aliases
 # route paid Claude through the same OpenRouter key.
@@ -1132,7 +1132,13 @@ model_aliases:
     model: "anthropic/claude-sonnet-4.6"
     provider: "openrouter"
   free:
+    model: "openai/gpt-oss-120b:free"
+    provider: "openrouter"
+  deepseek:
     model: "deepseek/deepseek-v4-flash:free"
+    provider: "openrouter"
+  gptoss:
+    model: "openai/gpt-oss-120b:free"
     provider: "openrouter"
   qwen:
     model: "qwen/qwen3-coder:free"
