@@ -118,3 +118,6 @@ ENV PATH="/opt/data/.local/bin:${PATH}"
 RUN mkdir -p /opt/data
 VOLUME [ "/opt/data" ]
 ENTRYPOINT [ "/usr/bin/tini", "-g", "--", "/opt/hermes/docker/entrypoint.sh" ]
+# Default command for Railway/cloud deployment: run the gateway (which hosts
+# the OpenAI-compatible API server when API_SERVER_* env vars are set).
+CMD [ "gateway", "run" ]
