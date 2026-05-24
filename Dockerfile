@@ -116,7 +116,10 @@ ENV HERMES_WEB_DIST=/opt/hermes/hermes_cli/web_dist
 ENV HERMES_HOME=/opt/data
 ENV PATH="/opt/data/.local/bin:${PATH}"
 RUN mkdir -p /opt/data
-VOLUME [ "/opt/data" ]
+# NOTE: Railway's builder rejects the Dockerfile VOLUME instruction ("use Railway
+# Volumes"). Persistence on Railway is provided by a Railway Volume mounted at
+# /opt/data. Kept here (commented) so local docker/compose still know the intent.
+# VOLUME [ "/opt/data" ]
 ENTRYPOINT [ "/usr/bin/tini", "-g", "--", "/opt/hermes/docker/entrypoint.sh" ]
 # Default command for Railway/cloud deployment: run the gateway (which hosts
 # the OpenAI-compatible API server when API_SERVER_* env vars are set).
