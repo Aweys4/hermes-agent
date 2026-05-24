@@ -8,7 +8,7 @@
 model:
   # Default model to use (can be overridden with --model flag)
   # Both "default" and "model" work as the key name here.
-  default: "anthropic/claude-opus-4.7"
+  default: "deepseek/deepseek-v4-flash:free"
   
   # Inference provider selection:
   #   "auto"         - Auto-detect from credentials (default)
@@ -1098,3 +1098,51 @@ display:
 #     - command: "~/.hermes/agent-hooks/log-orchestration.sh"
 #
 # hooks_auto_accept: false
+
+# =============================================================================
+# Railway deployment overrides — FREE models by default
+# =============================================================================
+# Main model (above) is a free OpenRouter model. Auxiliary side-tasks are also
+# pinned to free models so nothing silently costs money. Switch the main model
+# to a paid one any time inside chat, e.g. `/model claude` or `/model claude-sonnet`.
+# If a free aux model is unavailable, Hermes logs a warning and falls back — it
+# does not crash.
+
+auxiliary:
+  vision:
+    provider: "openrouter"
+    model: "nvidia/nemotron-nano-12b-v2-vl:free"
+  web_extract:
+    provider: "openrouter"
+    model: "nvidia/nemotron-nano-9b-v2:free"
+  session_search:
+    provider: "openrouter"
+    model: "nvidia/nemotron-nano-9b-v2:free"
+  compression:
+    provider: "openrouter"
+    model: "nvidia/nemotron-nano-9b-v2:free"
+
+# Short names for `/model <alias>`. Free aliases stay free; the claude aliases
+# route paid Claude through the same OpenRouter key.
+model_aliases:
+  claude:
+    model: "anthropic/claude-opus-4.7"
+    provider: "openrouter"
+  claude-sonnet:
+    model: "anthropic/claude-sonnet-4.6"
+    provider: "openrouter"
+  free:
+    model: "deepseek/deepseek-v4-flash:free"
+    provider: "openrouter"
+  qwen:
+    model: "qwen/qwen3-coder:free"
+    provider: "openrouter"
+  minimax:
+    model: "minimax/minimax-m2.5:free"
+    provider: "openrouter"
+  glm:
+    model: "z-ai/glm-4.5-air:free"
+    provider: "openrouter"
+  nemotron:
+    model: "nvidia/nemotron-3-super-120b-a12b:free"
+    provider: "openrouter"
